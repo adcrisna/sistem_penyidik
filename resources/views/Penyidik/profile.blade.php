@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group has-feedback">
                                 <label>No HP </label>
-                                <input type="text" name="ho_hp" class="form-control" value="{{ $penyidik->no_hp }}"
+                                <input type="text" name="no_hp" class="form-control" value="{{ $penyidik->no_hp }}"
                                     required>
                             </div>
                             <div class="form-group has-feedback">
