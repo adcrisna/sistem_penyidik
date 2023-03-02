@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('penyidik')->middleware(['penyidik'])->group(function () {
         Route::any('/home', [PenyidikController::class, 'index'])->name('penyidik_home');
         Route::any('/profile', [PenyidikController::class, 'profile'])->name('penyidik_profile');
+        Route::any('/print_profile', [PenyidikController::class, 'print_profile'])->name('print_profile');
         Route::any('/update_profile', [PenyidikController::class, 'update_profile'])->name('update_profile');
         Route::any('/logout', [PenyidikController::class, 'logout'])->name('penyidik_logout');
 
@@ -37,10 +38,15 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/tambah_kasus', [PenyidikController::class, 'tambah_kasus'])->name('tambah_kasus');
         Route::any('/update_kasus', [PenyidikController::class, 'update_kasus'])->name('update_kasus');
         Route::any('/delete_kasus{id}', [PenyidikController::class, 'delete_kasus'])->name('delete_kasus');
+        Route::any('/print_kasus', [PenyidikController::class, 'print_kasus'])->name('print_kasus');
 
         Route::any('/penyerahan_bukti', [PenyidikController::class, 'penyerahan_bukti'])->name('penyerahan_bukti');
+        Route::any('/edit_bukti', [PenyidikController::class, 'edit_bukti'])->name('edit_bukti');
+        Route::any('/print_penyerahan', [PenyidikController::class, 'print_penyerahan'])->name('print_penyerahan');
         Route::any('/selesai_kasus{id}', [PenyidikController::class, 'selesai'])->name('selesai');
         Route::any('/pengembalian_bukti', [PenyidikController::class, 'pengembalian_bukti'])->name('pengembalian_bukti');
+        Route::any('/data_pengembalian', [PenyidikController::class, 'data_pengembalian'])->name('data_pengembalian');
+        Route::any('/print_pengembalian', [PenyidikController::class, 'print_pengembalian'])->name('print_pengembalian');
     });
 });
 

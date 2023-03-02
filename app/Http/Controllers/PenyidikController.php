@@ -357,12 +357,12 @@ class PenyidikController extends Controller
     }
     public function print_petugas()
     {
-        $image = asset('bnn.png');
+        // $image = asset('bnn.png');
         $this->fpdf->SetAutoPageBreak(true);
         $this->fpdf->SetTitle("Laporan Data Petugas");
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->addPage('L','A4');
-        // $this->fpdf->Image($image, $this->fpdf->getX()+10, 7, 42 , 22,'PNG');
+        $this->fpdf->Image('bnn.png',10,4,30);
         $this->fpdf->setX(80);
 		$this->fpdf->SetFont('Helvetica','B','13');
 		$this->fpdf->cell(135,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
@@ -381,7 +381,7 @@ class PenyidikController extends Controller
 			$this->fpdf->cell(45,6,'Nama',1,0,'C');
 			$this->fpdf->cell(40,6,'Jabatan',1,0,'C');
             $this->fpdf->cell(80,6,'Alamat',1,0,'C');
-            $this->fpdf->cell(40,6,'Username',1,0,'C');
+            $this->fpdf->cell(40,6,'No HP',1,0,'C');
 			$this->fpdf->cell(35,6,'Status',1,0,'C');
 			$this->fpdf->SetFont('Helvetica','','11');
 			$this->fpdf->ln();
@@ -391,7 +391,7 @@ class PenyidikController extends Controller
 					$this->fpdf->cell(45,6,$value->nama,1,0,'C');
 					$this->fpdf->cell(40,6,$value->jabatan,1,0,'C');
                     $this->fpdf->cell(80,6,$value->alamat,1,0,'C');
-                    $this->fpdf->cell(40,6,$value->username,1,0,'C');
+                    $this->fpdf->cell(40,6,$value->no_hp,1,0,'C');
 					$this->fpdf->cell(35,6,$value->status,1,0,'C');
 					$this->fpdf->ln();
 				}
@@ -424,8 +424,7 @@ class PenyidikController extends Controller
             $this->fpdf->cell(97,6,'',0,0,'');
             $this->fpdf->cell(40,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
 			$this->fpdf->cell(40,6,'',0,0,'');
-        $this->fpdf->Output();
-
+        $this->fpdf->Output('data_petugas_bnn_kalsel.pdf','I');
         exit;
     }
 
@@ -535,7 +534,7 @@ class PenyidikController extends Controller
         );
         Pengembalian::insert($pengembalian);
         \Session::flash('msg_update_data','Data Kasus Berhasil di Update!');
-        return \Redirect::route('penyerahan_bukti');
+        return \Redirect::back();
     }
     public function selesai($id)
     {
@@ -544,6 +543,319 @@ class PenyidikController extends Controller
         );
         BarangBukti::where('id_barang_bukti','=',$id)->update($data);
         \Session::flash('msg_update_data','Data Kasus Selesai!');
-        return \Redirect::route('penyerahan_bukti');
+        return \Redirect::back();
+    }
+
+    public function data_pengembalian()
+    {
+        $data['title'] = "Pengembalian Barang Bukti";
+        $data['pengembalian'] = Pengembalian::join('barang_bukti','pengembalian.id_barang_bukti','barang_bukti.id_barang_bukti')->
+        join('kasus','barang_bukti.id_kasus','kasus.id_kasus')->get();
+        return view('Penyidik/pengembalian',$data);
+    }
+
+    public function print_kasus()
+    {
+        // $image = asset('bnn.png');
+        $this->fpdf->SetAutoPageBreak(true);
+        $this->fpdf->SetTitle("Laporan Data Kasus");
+        $this->fpdf->SetFont('Arial', 'B', 15);
+        $this->fpdf->addPage('P','A4');
+        $this->fpdf->Image('bnn.png',10,5,30);
+        $this->fpdf->setX(40);
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(150,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(150,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','10');
+		$this->fpdf->cell(150,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,",0,2,'C');
+        $this->fpdf->cell(150,6,"Antasan Besar, Banjarmasin Tengah Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','12');
+		$this->fpdf->cell(135,6,"",0,2,'C');
+		$this->fpdf->line(10,($this->fpdf->getY()+3),200,($this->fpdf->getY()+3));
+        $this->fpdf->line(10,($this->fpdf->getY()+4),200,($this->fpdf->getY()+4));
+		$this->fpdf->ln();
+            $this->fpdf->ln();
+			$this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(35,6,'Nomor Kasus',1,0,'C');
+			$this->fpdf->cell(40,6,'Tanggal Kasus',1,0,'C');
+			$this->fpdf->cell(80,6,'Surat Perintah',1,0,'C');
+            $this->fpdf->cell(35,6,'Penyidik',1,0,'C');
+			$this->fpdf->SetFont('Helvetica','','11');
+			$this->fpdf->ln();
+            $kasus = Kasus::get();
+            foreach ($kasus as $key => $value) {
+					$this->fpdf->cell(35,6,$value->id_kasus,1,0,'C');
+					$this->fpdf->cell(40,6,$value->tanggal_kasus,1,0,'C');
+					$this->fpdf->cell(80,6,$value->surat_perintah,1,0,'C');
+                    $this->fpdf->cell(35,6,$value->penyidik,1,0,'C');
+					$this->fpdf->ln();
+				}
+            $this->fpdf->ln();
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(107,6,'',0,0,'');
+            $this->fpdf->cell(80,6,"Banjarmasin, ".date('d-M-Y'),0,0,'');
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->ln();
+            $this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(92,6,'',0,0,'');
+            $this->fpdf->cell(80,6,'Kepala Badan Narkotika Nasional',0,0,'');
+			$this->fpdf->cell(35,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(101,6,'',0,0,'');
+            $this->fpdf->cell(80,6,'Provinsi Kalimantan Selatan,',0,0,'');
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(100,6,'',0,0,'');
+            $this->fpdf->cell(80,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
+            $this->fpdf->cell(35,6,'',0,0,'');
+        $this->fpdf->Output('data_kasus_bnn_kalsel.pdf','I');
+        exit;
+    }
+
+    public function print_penyerahan()
+    {
+        // $image = asset('bnn.png');
+        $this->fpdf->SetAutoPageBreak(true);
+        $this->fpdf->SetTitle("Laporan Data Penyerahan Bukti");
+        $this->fpdf->SetFont('Arial', 'B', 15);
+        $this->fpdf->addPage('L','A4');
+        $this->fpdf->Image('bnn.png',10,4,30);
+        $this->fpdf->setX(80);
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(135,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(135,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','10');
+		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41, Antasan Besar, Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','12');
+		$this->fpdf->cell(135,6,"",0,2,'C');
+		$this->fpdf->line(10,($this->fpdf->getY()+3),285,($this->fpdf->getY()+3));
+        $this->fpdf->line(10,($this->fpdf->getY()+4),285,($this->fpdf->getY()+4));
+		$this->fpdf->ln();
+            $this->fpdf->ln();
+			$this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(35,6,'Nomor Kasus',1,0,'C');
+			$this->fpdf->cell(45,6,'Tanggal',1,0,'C');
+			$this->fpdf->cell(40,6,'Jenis',1,0,'C');
+            $this->fpdf->cell(40,6,'Kondisi',1,0,'C');
+            $this->fpdf->cell(40,6,'Jumlah',1,0,'C');
+            $this->fpdf->cell(40,6,'Petugas',1,0,'C');
+			$this->fpdf->cell(35,6,'Status',1,0,'C');
+			$this->fpdf->SetFont('Helvetica','','11');
+			$this->fpdf->ln();
+            $penyerahan = Penyerahan::join('barang_bukti','penyerahan.id_barang_bukti','barang_bukti.id_barang_bukti')->
+        join('kasus','barang_bukti.id_kasus','kasus.id_kasus')->get();
+            foreach ($penyerahan as $key => $value) {
+					$this->fpdf->cell(35,6,$value->id_kasus,1,0,'C');
+					$this->fpdf->cell(45,6,$value->tgl_penyerahan,1,0,'C');
+					$this->fpdf->cell(40,6,$value->jenis_barbuk,1,0,'C');
+                    $this->fpdf->cell(40,6,$value->kondisi_barbuk,1,0,'C');
+                    $this->fpdf->cell(40,6,$value->jumlah_barbuk,1,0,'C');
+                    $this->fpdf->cell(40,6,$value->petugas,1,0,'C');
+					$this->fpdf->cell(35,6,$value->status,1,0,'C');
+					$this->fpdf->ln();
+				}
+            $this->fpdf->ln();
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(108,6,'',0,0,'');
+			$this->fpdf->cell(40,6,"Banjarmasin, ".date('d-M-Y'),0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+			$this->fpdf->ln();
+            $this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(93,6,'',0,0,'');
+			$this->fpdf->cell(40,6,'Kepala Badan Narkotika Nasional',0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(102,6,'',0,0,'');
+			$this->fpdf->cell(40,6,'Provinsi Kalimantan Selatan,',0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(97,6,'',0,0,'');
+            $this->fpdf->cell(40,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+        $this->fpdf->Output('data_penyerahan_bukti_bnn_kalsel.pdf','I');
+        exit;
+    }
+    public function print_pengembalian()
+    {
+        // $image = asset('bnn.png');
+        $this->fpdf->SetAutoPageBreak(true);
+        $this->fpdf->SetTitle("Laporan Data Pengembalian Bukti");
+        $this->fpdf->SetFont('Arial', 'B', 15);
+        $this->fpdf->addPage('L','A4');
+        $this->fpdf->Image('bnn.png',10,4,30);
+        $this->fpdf->setX(80);
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(135,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(135,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','10');
+		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41, Antasan Besar, Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','12');
+		$this->fpdf->cell(135,6,"",0,2,'C');
+		$this->fpdf->line(10,($this->fpdf->getY()+3),285,($this->fpdf->getY()+3));
+        $this->fpdf->line(10,($this->fpdf->getY()+4),285,($this->fpdf->getY()+4));
+		$this->fpdf->ln();
+            $this->fpdf->ln();
+			$this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(35,6,'ID Pengembalian',1,0,'C');
+			$this->fpdf->cell(45,6,'No Kasus',1,0,'C');
+			$this->fpdf->cell(40,6,'Tanggal',1,0,'C');
+            $this->fpdf->cell(80,6,'Keterangan',1,0,'C');
+            $this->fpdf->cell(40,6,'Penyidik',1,0,'C');
+			$this->fpdf->cell(35,6,'Status',1,0,'C');
+			$this->fpdf->SetFont('Helvetica','','11');
+			$this->fpdf->ln();
+            $pengembalian = Pengembalian::join('barang_bukti','pengembalian.id_barang_bukti','barang_bukti.id_barang_bukti')->
+        join('kasus','barang_bukti.id_kasus','kasus.id_kasus')->get();
+            foreach ($pengembalian as $key => $value) {
+					$this->fpdf->cell(35,6,$value->id_pengembalian,1,0,'C');
+					$this->fpdf->cell(45,6,$value->id_kasus,1,0,'C');
+					$this->fpdf->cell(40,6,$value->tgl_pengembalian,1,0,'C');
+                    $this->fpdf->cell(80,6,$value->keterangan,1,0,'C');
+                    $this->fpdf->cell(40,6,$value->penyidik,1,0,'C');
+					$this->fpdf->cell(35,6,$value->status,1,0,'C');
+					$this->fpdf->ln();
+				}
+            $this->fpdf->ln();
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(108,6,'',0,0,'');
+			$this->fpdf->cell(40,6,"Banjarmasin, ".date('d-M-Y'),0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+			$this->fpdf->ln();
+            $this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(93,6,'',0,0,'');
+			$this->fpdf->cell(40,6,'Kepala Badan Narkotika Nasional',0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(102,6,'',0,0,'');
+			$this->fpdf->cell(40,6,'Provinsi Kalimantan Selatan,',0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->cell(65,6,'',0,0,'');
+			$this->fpdf->cell(55,6,'',0,0,'');
+            $this->fpdf->cell(97,6,'',0,0,'');
+            $this->fpdf->cell(40,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
+			$this->fpdf->cell(40,6,'',0,0,'');
+        $this->fpdf->Output('data_pengembalian_bukti_bnn_kalsel.pdf','I');
+        exit;
+    }
+    public function edit_bukti(Request $request)
+    {
+        $data=array(
+            'jenis_barbuk' => $request->jenis,
+            'kondisi_barbuk' => $request->kondisi,
+            'jumlah_barbuk' => $request->jumlah,
+        );
+        BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->update($data);
+        \Session::flash('msg_update_data','Data Kasus Selesai!');
+        return \Redirect::back();
+    }
+    public function print_profile()
+    {
+        // $image = asset('bnn.png');
+        $this->fpdf->SetAutoPageBreak(true);
+        $this->fpdf->SetTitle("Data Profile Penyidik");
+        $this->fpdf->SetFont('Arial', 'B', 15);
+        $this->fpdf->addPage('P','A4');
+        $this->fpdf->Image('bnn.png',10,5,30);
+        $this->fpdf->setX(40);
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(150,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','13');
+		$this->fpdf->cell(150,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','10');
+		$this->fpdf->cell(150,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,",0,2,'C');
+        $this->fpdf->cell(150,6,"Antasan Besar, Banjarmasin Tengah Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','B','12');
+		$this->fpdf->cell(135,6,"",0,2,'C');
+		$this->fpdf->line(10,($this->fpdf->getY()+3),200,($this->fpdf->getY()+3));
+        $this->fpdf->line(10,($this->fpdf->getY()+4),200,($this->fpdf->getY()+4));
+		$this->fpdf->ln();
+            $this->fpdf->ln();
+            $user = User::where('id',Auth::user()->id)->first();
+            $this->fpdf->cell(40,6,$this->fpdf->Image('uploads/'.$user->foto_user,90,50,25),0,0,'C');
+            $this->fpdf->ln();
+            $this->fpdf->ln();
+            $this->fpdf->ln();
+            $this->fpdf->ln();
+            $this->fpdf->ln();
+            $this->fpdf->ln();
+            $this->fpdf->ln();
+            $this->fpdf->ln();
+			$this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(35,6,'Nomor Induk',1,0,'C');
+			$this->fpdf->cell(40,6,'Nama',1,0,'C');
+            $this->fpdf->cell(40,6,'Jabatan',1,0,'C');
+			$this->fpdf->cell(40,6,'No Handphone',1,0,'C');
+            $this->fpdf->cell(35,6,'Status',1,0,'C');
+			$this->fpdf->SetFont('Helvetica','','11');
+			$this->fpdf->ln();
+            $this->fpdf->SetFont('Helvetica','','11');
+            $this->fpdf->cell(35,6,$user->nip,1,0,'C');
+			$this->fpdf->cell(40,6,$user->nama,1,0,'C');
+            $this->fpdf->cell(40,6,$user->jabatan,1,0,'C');
+			$this->fpdf->cell(40,6,$user->no_hp,1,0,'C');
+            $this->fpdf->cell(35,6,$user->status,1,0,'C');
+			$this->fpdf->SetFont('Helvetica','','11');
+			$this->fpdf->ln();
+        $this->fpdf->cell(135,6,"",0,2,'C');
+		$this->fpdf->line(10,($this->fpdf->getY()+3),200,($this->fpdf->getY()+3));
+		$this->fpdf->ln();
+            $this->fpdf->ln();
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(107,6,'',0,0,'');
+            $this->fpdf->cell(80,6,"Banjarmasin, ".date('d-M-Y'),0,0,'');
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->ln();
+            $this->fpdf->SetFont('Helvetica','B','11');
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(92,6,'',0,0,'');
+            $this->fpdf->cell(80,6,'Kepala Badan Narkotika Nasional',0,0,'');
+			$this->fpdf->cell(35,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(101,6,'',0,0,'');
+            $this->fpdf->cell(80,6,'Provinsi Kalimantan Selatan,',0,0,'');
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->cell(35,6,'',0,0,'');
+			$this->fpdf->cell(100,6,'',0,0,'');
+            $this->fpdf->cell(80,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
+            $this->fpdf->cell(35,6,'',0,0,'');
+        $this->fpdf->Output('profile_penyidik_bnn_kalsel.pdf','I');
+        exit;
     }
 }

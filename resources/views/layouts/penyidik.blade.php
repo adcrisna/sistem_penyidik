@@ -53,6 +53,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('data_pengembalian') }}">
+                            <i class="fa fa-suitcase"></i> <span>Pengembalian Bukti</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('penyidik_profile') }}">
                             <i class="fa fa-wrench"></i> <span>Profile</span>
                         </a>

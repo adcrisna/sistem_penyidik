@@ -70,7 +70,8 @@
                     <div class="box-header">
                         <h3 class="box-title">Data Petugas</h3>
                         <div class="box-tools pull-right">
-                            <a href="{{ route('print_petugas') }}" class="btn btn-warning btn-xs">Print</a>
+                            <a href="{{ route('print_petugas') }}" class="btn btn-warning btn-xs"><i
+                                    class="fa fa-print"></i> Print</a>
                             <button type="button" class="btn btn-info btn-xs" data-toggle="modal"
                                 data-target="#modal-form-tambah-karyawan"><i class="fa fa-user-plus"> Tambah Data Petugas
                                 </i></button>

@@ -26,6 +26,11 @@
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title">Profile Penyidik</h3>
+                        <div class="box-tools pull-right">
+                            <a href="{{ route('print_profile') }}" class="btn btn-warning btn-xs"><i
+                                    class="fa fa-print"></i>
+                                Print</a>
+                        </div>
                     </div>
                     <div class="box-body table-responsive">
                         <form action="{{ route('update_profile') }}" method="post" enctype="multipart/form-data">
