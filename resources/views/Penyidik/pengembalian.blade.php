@@ -80,7 +80,7 @@
                             <thead>
                                 <tr>
                                     <th>ID Pengembalian</th>
-                                    <th>Foto</th>
+                                    <th>Foto Bukti</th>
                                     <th>Nomor Kasus</th>
                                     <th>Tanggal</th>
                                     <th>Penyidik </th>
@@ -93,7 +93,7 @@
                                 @foreach (@$pengembalian as $key => $value)
                                     <tr>
                                         <td>{{ @$value->id_pengembalian }}</td>
-                                        <td><img src="{{ asset('uploads/' . $value->foto_pengembalian) }}" class="zoom">
+                                        <td><img src="{{ asset('uploads/' . $value->foto_barbuk) }}" class="zoom">
                                         </td>
                                         <td>{{ @$value->id_kasus }}</td>
                                         <td>{{ @$value->tgl_pengembalian }}</td>

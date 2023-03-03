@@ -362,14 +362,16 @@ class PenyidikController extends Controller
         $this->fpdf->SetTitle("Laporan Data Petugas");
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->addPage('L','A4');
-        $this->fpdf->Image('bnn.png',10,4,30);
+        $this->fpdf->Image('bnn.png',15,9,32);
         $this->fpdf->setX(80);
 		$this->fpdf->SetFont('Helvetica','B','13');
 		$this->fpdf->cell(135,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','13');
 		$this->fpdf->cell(135,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
-		$this->fpdf->SetFont('Helvetica','','10');
-		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41, Antasan Besar, Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','11');
+		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,Banjarmasin",0,2,'C');
+        $this->fpdf->cell(135,6,"Telepon (21) 8087-1566 | (21) 8087-1567",0,2,'C');
+        $this->fpdf->cell(135,6,"e-mail : bnnpkalsel@gmail.com",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','12');
 		$this->fpdf->cell(135,6,"",0,2,'C');
 		$this->fpdf->line(10,($this->fpdf->getY()+3),285,($this->fpdf->getY()+3));
@@ -520,16 +522,16 @@ class PenyidikController extends Controller
         );
         $bukti = BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->first();
         BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->update($data);
-        $namalampiran = "Pengembalian"."  ".$request->noKasus." ".date("Y-m-d H-i-s");
-        $extention = $request->file('lampiran')->extension();
-        $lampiran = sprintf('%s.%0.8s', $namalampiran, $extention);
-        $destination = base_path() .'/public/uploads';
-        $request->file('lampiran')->move($destination,$lampiran);
+        // $namalampiran = "Pengembalian"."  ".$request->noKasus." ".date("Y-m-d H-i-s");
+        // $extention = $request->file('lampiran')->extension();
+        // $lampiran = sprintf('%s.%0.8s', $namalampiran, $extention);
+        // $destination = base_path() .'/public/uploads';
+        // $request->file('lampiran')->move($destination,$lampiran);
         $pengembalian=array(
             'id_barang_bukti' => $request->id_barang_bukti,
             'penyidik' => Auth::User()->nama,
             'tgl_pengembalian' => $request->tanggal,
-            'foto_pengembalian' => $lampiran,
+            // 'foto_pengembalian' => $lampiran,
             'keterangan' => $request->keterangan
         );
         Pengembalian::insert($pengembalian);
@@ -561,15 +563,16 @@ class PenyidikController extends Controller
         $this->fpdf->SetTitle("Laporan Data Kasus");
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->addPage('P','A4');
-        $this->fpdf->Image('bnn.png',10,5,30);
+        $this->fpdf->Image('bnn.png',10,9,30);
         $this->fpdf->setX(40);
 		$this->fpdf->SetFont('Helvetica','B','13');
 		$this->fpdf->cell(150,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','13');
 		$this->fpdf->cell(150,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
-		$this->fpdf->SetFont('Helvetica','','10');
-		$this->fpdf->cell(150,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,",0,2,'C');
-        $this->fpdf->cell(150,6,"Antasan Besar, Banjarmasin Tengah Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','11');
+		$this->fpdf->cell(150,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,Banjarmasin",0,2,'C');
+        $this->fpdf->cell(150,6,"Telepon (21) 8087-1566 | (21) 8087-1567",0,2,'C');
+        $this->fpdf->cell(150,6,"e-mail : bnnpkalsel@gmail.com",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','12');
 		$this->fpdf->cell(135,6,"",0,2,'C');
 		$this->fpdf->line(10,($this->fpdf->getY()+3),200,($this->fpdf->getY()+3));
@@ -627,14 +630,16 @@ class PenyidikController extends Controller
         $this->fpdf->SetTitle("Laporan Data Penyerahan Bukti");
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->addPage('L','A4');
-        $this->fpdf->Image('bnn.png',10,4,30);
+        $this->fpdf->Image('bnn.png',15,9,32);
         $this->fpdf->setX(80);
 		$this->fpdf->SetFont('Helvetica','B','13');
-		$this->fpdf->cell(135,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
+		$this->fpdf->cell(150,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','13');
-		$this->fpdf->cell(135,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
-		$this->fpdf->SetFont('Helvetica','','10');
-		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41, Antasan Besar, Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->cell(150,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','11');
+		$this->fpdf->cell(150,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,Banjarmasin",0,2,'C');
+        $this->fpdf->cell(150,6,"Telepon (21) 8087-1566 | (21) 8087-1567",0,2,'C');
+        $this->fpdf->cell(150,6,"e-mail : bnnpkalsel@gmail.com",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','12');
 		$this->fpdf->cell(135,6,"",0,2,'C');
 		$this->fpdf->line(10,($this->fpdf->getY()+3),285,($this->fpdf->getY()+3));
@@ -702,14 +707,16 @@ class PenyidikController extends Controller
         $this->fpdf->SetTitle("Laporan Data Pengembalian Bukti");
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->addPage('L','A4');
-        $this->fpdf->Image('bnn.png',10,4,30);
+        $this->fpdf->Image('bnn.png',15,9,32);
         $this->fpdf->setX(80);
 		$this->fpdf->SetFont('Helvetica','B','13');
 		$this->fpdf->cell(135,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','13');
 		$this->fpdf->cell(135,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
-		$this->fpdf->SetFont('Helvetica','','10');
-		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41, Antasan Besar, Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','11');
+		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,Banjarmasin",0,2,'C');
+        $this->fpdf->cell(135,6,"Telepon (21) 8087-1566 | (21) 8087-1567",0,2,'C');
+        $this->fpdf->cell(135,6,"e-mail : bnnpkalsel@gmail.com",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','12');
 		$this->fpdf->cell(135,6,"",0,2,'C');
 		$this->fpdf->line(10,($this->fpdf->getY()+3),285,($this->fpdf->getY()+3));
@@ -786,17 +793,17 @@ class PenyidikController extends Controller
         $this->fpdf->SetTitle("Data Profile Penyidik");
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->addPage('P','A4');
-        $this->fpdf->Image('bnn.png',10,5,30);
+        $this->fpdf->Image('bnn.png',10,9,30);
         $this->fpdf->setX(40);
 		$this->fpdf->SetFont('Helvetica','B','13');
-		$this->fpdf->cell(150,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
+		$this->fpdf->cell(135,6,"BADAN NARKOTIKA NASIONAL REPUBLIK INDONESIA",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','13');
-		$this->fpdf->cell(150,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
-		$this->fpdf->SetFont('Helvetica','','10');
-		$this->fpdf->cell(150,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,",0,2,'C');
-        $this->fpdf->cell(150,6,"Antasan Besar, Banjarmasin Tengah Kota Banjarmasin, Kalimantan Selatan 70123",0,2,'C');
+		$this->fpdf->cell(135,6,"PROVINSI KALIMANTAN SELATAN",0,2,'C');
+		$this->fpdf->SetFont('Helvetica','','11');
+		$this->fpdf->cell(135,6,"Jalan Mayjen Jl. D. I. Panjaitan No.41,Banjarmasin",0,2,'C');
+        $this->fpdf->cell(135,6,"Telepon (21) 8087-1566 | (21) 8087-1567",0,2,'C');
+        $this->fpdf->cell(135,6,"e-mail : bnnpkalsel@gmail.com",0,2,'C');
 		$this->fpdf->SetFont('Helvetica','B','12');
-		$this->fpdf->cell(135,6,"",0,2,'C');
 		$this->fpdf->line(10,($this->fpdf->getY()+3),200,($this->fpdf->getY()+3));
         $this->fpdf->line(10,($this->fpdf->getY()+4),200,($this->fpdf->getY()+4));
 		$this->fpdf->ln();
