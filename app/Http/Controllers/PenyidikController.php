@@ -548,16 +548,18 @@ class PenyidikController extends Controller
         );
         $bukti = BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->first();
         BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->update($data);
-        // $namalampiran = "Pengembalian"."  ".$request->noKasus." ".date("Y-m-d H-i-s");
-        // $extention = $request->file('lampiran')->extension();
-        // $lampiran = sprintf('%s.%0.8s', $namalampiran, $extention);
-        // $destination = base_path() .'/public/uploads';
-        // $request->file('lampiran')->move($destination,$lampiran);
+
+        $namalampiran = "Pengembalian"."  ".$bukti->id_kasus." ".date("Y-m-d H-i-s");
+        $extention = $request->file('foto')->extension();
+        $lampiran = sprintf('%s.%0.8s', $namalampiran, $extention);
+        $destination = base_path() .'/public/uploads';
+        $request->file('foto')->move($destination,$lampiran);
         $pengembalian=array(
             'id_barang_bukti' => $request->id_barang_bukti,
+            'id_kasus' => $bukti->id_kasus,
             'penyidik' => Auth::User()->nama,
             'tgl_pengembalian' => $request->tanggal,
-            // 'foto_pengembalian' => $lampiran,
+            'foto_pengembalian' => $lampiran,
             'keterangan' => $request->keterangan
         );
         Pengembalian::insert($pengembalian);

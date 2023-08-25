@@ -151,10 +151,10 @@
                             <label for="">Tanggal Pengembalian</label>
                             <input type="date" name="tanggal" class="form-control">
                         </div>
-                        {{-- <div class="form-group has-feedback">
+                        <div class="form-group has-feedback">
                             <label>Foto Pengembalian:</label>
-                            <input type="file" name="lampiran" class="form-control" id="lampiran">
-                        </div> --}}
+                            <input type="file" name="foto" class="form-control" id="foto">
+                        </div>
                         <div class="form-group has-feedback">
                             <label>Keterangan</label>
                             <textarea name="keterangan" id="keterangan" class="form-control" cols="5" rows="3"></textarea>
@@ -185,7 +185,8 @@
                         {{ csrf_field() }}
                         <div class="form-group has-feedback">
                             <label for="">ID Barang Bukti</label>
-                            <input type="text" name="id_barang_bukti" readonly class="form-control" placeholder="ID ">
+                            <input type="text" name="id_barang_bukti" readonly class="form-control"
+                                placeholder="ID ">
                         </div>
                         <div class="form-group has-feedback">
                             <label for="">Nomor Kasus</label>
