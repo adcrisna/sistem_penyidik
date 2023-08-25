@@ -83,6 +83,7 @@
                                     <th>ID</th>
                                     <th>Foto</th>
                                     <th>Nomor Kasus</th>
+                                    <th>Kota</th>
                                     <th>Jenis </th>
                                     <th>Kondisi </th>
                                     <th>Jumlah</th>
@@ -96,6 +97,7 @@
                                         <td>{{ @$value->id_barang_bukti }}</td>
                                         <td><img src="{{ asset('uploads/' . $value->foto_barbuk) }}" class="zoom"></td>
                                         <td>{{ @$value->id_kasus }}</td>
+                                        <td>{{ @$value->kota }}</td>
                                         <td>{{ @$value->jenis_barbuk }}</td>
                                         <td>{{ @$value->kondisi_barbuk }}</td>
                                         <td>{{ @$value->jumlah_barbuk }}</td>
@@ -163,6 +165,38 @@
                             <label>Foto :</label>
                             <input type="file" name="lampiran" class="form-control" id="lampiran" required>
                         </div>
+                        <div class="form-group has-feedback">
+                            <label>Kota/Kabupaten</label>
+                            <select name="kota" id="kota" class="form-control" required>
+                                <option value="">Pilih Kota</option>
+                                <option value="Kabupaten Balangan">Kabupaten Balangan</option>
+                                <option value="Kabupaten Banjar">Kabupaten Banjar</option>
+                                <option value="Kabupaten Barito Kuala">Kabupaten Barito Kuala</option>
+                                <option value="Kabupaten Hulu Sungai Selatan">Kabupaten Hulu Sungai Selatan</option>
+                                <option value="Kabupaten Hulu Sungai Tengah">Kabupaten Hulu Sungai Tengah</option>
+                                <option value="Kabupaten Hulu Sungai Utara">Kabupaten Hulu Sungai Utara</option>
+                                <option value="Kabupaten Kotabaru">Kabupaten Kotabaru</option>
+                                <option value="Kabupaten Tabalong">Kabupaten Tabalong</option>
+                                <option value="Kabupaten Tanah Bumbu">Kabupaten Tanah Bumbu</option>
+                                <option value="Kabupaten Tanah Laut">Kabupaten Tanah Laut</option>
+                                <option value="Kabupaten Tapin">Kabupaten Tapin</option>
+                                <option value="Kota Banjarbaru">Kota Banjarbaru</option>
+                                <option value="Kota Banjarmasin">Kota Banjarmasin</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div id="googleMap" style="width:100%;height:380px;"></div>
+                        <br />
+                        <div class="form-group has-feedback">
+                            <label>Latitude :</label>
+                            <input type="text" id="lat" name="lat" class="form-control" value=""
+                                readonly required>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label>Longitude</label>
+                            <input type="text" id="lng" name="lng" value="" class="form-control"
+                                readonly required>
+                        </div>
                         <div class="row">
                             <div class="col-xs-4 col-xs-offset-8">
                                 <button type="submit" class="btn btn-primary btn-block btn-flat">Simpan</button>
@@ -181,6 +215,7 @@
 @section('javascript')
     <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript">
         var table = $('#data-karyawan').DataTable();
 
@@ -214,5 +249,48 @@
                 $(this).removeClass('transisi');
             });
         });
+    </script>
+    <script>
+        // variabel global marker
+        var marker;
+
+        function taruhMarker(peta, posisiTitik) {
+
+            if (marker) {
+                // pindahkan marker
+                marker.setPosition(posisiTitik);
+            } else {
+                // buat marker baru
+                marker = new google.maps.Marker({
+                    position: posisiTitik,
+                    map: peta
+                });
+            }
+
+            // isi nilai koordinat ke form
+            document.getElementById("lat").value = posisiTitik.lat();
+            document.getElementById("lng").value = posisiTitik.lng();
+
+        }
+
+        function initialize() {
+            var propertiPeta = {
+                center: new google.maps.LatLng(-3.36858077824835, 114.69636791372943),
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var peta = new google.maps.Map(document.getElementById("googleMap"), propertiPeta);
+
+
+            // even listner ketika peta diklik
+            google.maps.event.addListener(peta, 'click', function(event) {
+                taruhMarker(this, event.latLng);
+            });
+
+        }
+
+        // event jendela di-load  
+        google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 @endsection

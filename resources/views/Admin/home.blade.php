@@ -1,4 +1,4 @@
-@extends('layouts.penyidik')
+@extends('layouts.admin')
 @section('css')
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/morris/morris.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/AdminLTE.min.css') }}">
@@ -7,7 +7,7 @@
 @section('content')
     <section class="content-header">
         <ol class="breadcrumb">
-            <li><a href="{{ route('penyidik_home') }}"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="{{ route('admin_home') }}"><i class="fa fa-home"></i> Home</a></li>
         </ol>
     </section>
     <section class="content">

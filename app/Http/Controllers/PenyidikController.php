@@ -8,6 +8,7 @@ use App\Models\Kasus;
 use App\Models\BarangBukti;
 use App\Models\Penyerahan;
 use App\Models\Pengembalian;
+use App\Models\History;
 use Auth;
 use DB;
 use Redirect;
@@ -24,6 +25,20 @@ class PenyidikController extends Controller
 
     public function index(){
         $data['title'] = "Dashboard";
+        $data['kabupatenBalangan'] = BarangBukti::where('kota','Kabupaten Balangan')->get();
+        $data['kabupatenBanjar'] = BarangBukti::where('kota','Kabupaten Banjar')->get();
+        $data['kabupatenBaritoKuala'] = BarangBukti::where('kota','Kabupaten Barito Kuala')->get();
+        $data['kabupatenHuluSungaiSelatan'] = BarangBukti::where('kota','Kabupaten Hulu Sungai Selatan')->get();
+        $data['kabupatenHuluSungaiTengah'] = BarangBukti::where('kota','Kabupaten Hulu Sungai Tengah')->get();
+        $data['kabupatenHuluSungaiUtara'] = BarangBukti::where('kota','Kabupaten Hulu Sungai Utara')->get();
+        $data['kabupatenKotabaru'] = BarangBukti::where('kota','Kabupaten Kotabaru')->get();
+        $data['kabupatenTabalong'] = BarangBukti::where('kota','Kabupaten Tabalong')->get();
+        $data['kabupatenTanahBumbu'] = BarangBukti::where('kota','Kabupaten Tanah Bumbu')->get();
+        $data['kabupatenTanahLaut'] = BarangBukti::where('kota','Kabupaten Tanah Laut')->get();
+        $data['kabupatenTapin'] = BarangBukti::where('kota','Kabupaten Tapin')->get();
+        $data['kotaBanjarbaru'] = BarangBukti::where('kota','Kota Banjarbaru')->get();
+        $data['kotaBanjarmasin'] = BarangBukti::where('kota','Kota Banjarmasin')->get();
+        $data['barangBukti'] = BarangBukti::all();
         return view('Penyidik/home',$data);
     }
 
@@ -426,6 +441,12 @@ class PenyidikController extends Controller
             $this->fpdf->cell(97,6,'',0,0,'');
             $this->fpdf->cell(40,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
 			$this->fpdf->cell(40,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();	
+            $this->fpdf->Image('qr_bnn.png',245,9,32);
         $this->fpdf->Output('data_petugas_bnn_kalsel.pdf','I');
         exit;
     }
@@ -457,8 +478,13 @@ class PenyidikController extends Controller
                 'penyidik' => Auth::User()->nama,
             );
             Kasus::insert($kasus);
-             \Session::flash('msg_simpan_data','Petugas Berhasil Ditambah!');
-            return \Redirect::back();
+        $history = new History;
+        $history->id_kasus = $kasus['id_kasus'];
+        $history->status = 'Kasus Baru Ditambahkan';
+        $history->save();
+
+        \Session::flash('msg_simpan_data','Kasus Berhasil Ditambah!');
+        return \Redirect::back();
     }
     public function update_kasus(Request $request)
     {
@@ -535,15 +561,38 @@ class PenyidikController extends Controller
             'keterangan' => $request->keterangan
         );
         Pengembalian::insert($pengembalian);
+
+        $history = new History;
+        $history->id_kasus = $bukti->id_kasus;
+        $history->status = 'Barang Bukti Kasus Dikembalikan';
+        $history->save();
+
         \Session::flash('msg_update_data','Data Kasus Berhasil di Update!');
         return \Redirect::back();
     }
-    public function selesai($id)
+    public function selesai(Request $request)
     {
+        // return $request;
         $data=array(
             'status' => 'Selesai',
         );
-        BarangBukti::where('id_barang_bukti','=',$id)->update($data);
+        BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->update($data);
+        $bukti = BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->first();
+
+        $dataPenyerahan = Penyerahan::where('id_barang_bukti', $request->id_barang_bukti)->first();
+        
+        $data1=array(
+            'pasal' => $request->pasal,
+            'status_barbuk' => 'Dimusnahkan',
+            'hukuman' => $request->hukuman,
+        );
+        Penyerahan::where('id_penyerahan','=',$dataPenyerahan->id_penyerahan)->update($data1);
+
+        $history = new History;
+        $history->id_kasus = $request->noKasus;
+        $history->status = 'Kasus Selesai';
+        $history->save();
+
         \Session::flash('msg_update_data','Data Kasus Selesai!');
         return \Redirect::back();
     }
@@ -619,6 +668,12 @@ class PenyidikController extends Controller
 			$this->fpdf->cell(100,6,'',0,0,'');
             $this->fpdf->cell(80,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
             $this->fpdf->cell(35,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();	
+            $this->fpdf->Image('qr_bnn.png',245,9,32);
         $this->fpdf->Output('data_kasus_bnn_kalsel.pdf','I');
         exit;
     }
@@ -697,6 +752,12 @@ class PenyidikController extends Controller
             $this->fpdf->cell(97,6,'',0,0,'');
             $this->fpdf->cell(40,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
 			$this->fpdf->cell(40,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();	
+            $this->fpdf->Image('qr_bnn.png',245,9,32);
         $this->fpdf->Output('data_penyerahan_bukti_bnn_kalsel.pdf','I');
         exit;
     }
@@ -772,8 +833,19 @@ class PenyidikController extends Controller
             $this->fpdf->cell(97,6,'',0,0,'');
             $this->fpdf->cell(40,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
 			$this->fpdf->cell(40,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();	
+            $this->fpdf->Image('qr_bnn.png',245,9,32);
         $this->fpdf->Output('data_pengembalian_bukti_bnn_kalsel.pdf','I');
         exit;
+    }
+    function detail_bukti($id){
+        $data['title'] = "Data Barang Bukti";
+        $data['bukti'] = BarangBukti::where('id_barang_bukti',$id)->first();
+        return view('Penyidik/detail_bukti',$data);
     }
     public function edit_bukti(Request $request)
     {
@@ -781,8 +853,11 @@ class PenyidikController extends Controller
             'jenis_barbuk' => $request->jenis,
             'kondisi_barbuk' => $request->kondisi,
             'jumlah_barbuk' => $request->jumlah,
+            'kota' => $request->kota,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
         );
-        BarangBukti::where('id_barang_bukti','=',$request->id_barang_bukti)->update($data);
+        BarangBukti::where('id_barang_bukti','=',$request->id)->update($data);
         \Session::flash('msg_update_data','Data Kasus Selesai!');
         return \Redirect::back();
     }
@@ -862,7 +937,24 @@ class PenyidikController extends Controller
 			$this->fpdf->cell(100,6,'',0,0,'');
             $this->fpdf->cell(80,6,'WISNU ANDAYANA, S.S.T.,Mk',0,0,'');
             $this->fpdf->cell(35,6,'',0,0,'');
+            $this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();
+			$this->fpdf->ln();	
+            $this->fpdf->Image('qr_bnn.png',245,9,32);
         $this->fpdf->Output('profile_penyidik_bnn_kalsel.pdf','I');
         exit;
+    }
+
+    function history(){
+        $data['title'] = "Data History";
+        $data['history'] = History::all();
+        return view('Penyidik/history',$data);
+    }
+    function kasus_selesai() {
+        $data['title'] = "Data History";
+        $data['selesai'] = Penyerahan::where('status_barbuk', 'Dimusnahkan')->get();
+        return view('Penyidik/selesai',$data);
     }
 }

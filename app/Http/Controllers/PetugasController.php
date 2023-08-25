@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\BarangBukti;
 use App\Models\Penyerahan;
 use App\Models\Kasus;
+use App\Models\History;
 use DB;
 
 class PetugasController extends Controller
@@ -43,8 +44,17 @@ class PetugasController extends Controller
                     'kondisi_barbuk' => $request->kondisi,
                     'jumlah_barbuk' => $request->jumlah,
                     'status' => 'Diproses',
+                    'kota' => $request->kota,
+                    'latitude' => $request->lat,
+                    'longitude' => $request->lng,
                 );
                 BarangBukti::insert($bukti);
+
+                $history = new History;
+                $history->id_kasus = $request->noKasus;
+                $history->status = 'Barang Bukti Kasus Ditambahkan';
+                $history->save();
+
                 \Session::flash('msg_simpan_data','Bukti Berhasil Ditambah!');
                 return \Redirect::back();
     }
@@ -71,11 +81,18 @@ class PetugasController extends Controller
             BarangBukti::where('id_barang_bukti','=',$id)->update($data);
             $penyerahan=array(
                 'id_barang_bukti' => $bukti->id_barang_bukti,
+                'id_kasus' => $bukti->id_kasus,
                 'petugas' => Auth::User()->nama,
                 'tgl_penyerahan' => date('Y-m-d'),
                 'foto_barang_bukti' => $bukti->foto_barbuk,
             );
             Penyerahan::insert($penyerahan);
+
+            $history = new History;
+            $history->id_kasus = $bukti->id_kasus;
+            $history->status = 'Barang Bukti Kasus Diproses';
+            $history->save();
+
             \Session::flash('msg_update_data','Data Kasus Berhasil di Update!');
             return \Redirect::route('data_bukti');
     }

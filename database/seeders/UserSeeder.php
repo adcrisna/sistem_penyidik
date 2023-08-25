@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'nip' => '1404569',
                 'status' => 'Aktif',
                 'username' => 'penyidik',
-                'password' => 'password',
+                'password' => bcrypt('password'),
                 'alamat' => 'alamat',
                 'lampiran' => 'lampiran',
                 

@@ -1,4 +1,4 @@
-@extends('layouts.penyidik')
+@extends('layouts.admin')
 @section('css')
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -24,7 +24,7 @@
 @section('content')
     <section class="content-header">
         <ol class="breadcrumb">
-            <li><a href="{{ route('penyidik_home') }}"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="{{ route('admin_home') }}"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Data Barang Bukti</li>
         </ol>
         <br />
@@ -70,11 +70,6 @@
                 <div class="box box-danger">
                     <div class="box-header">
                         <h3 class="box-title">Data Penyerahan Barang Bukti</h3>
-                        <div class="box-tools pull-right">
-                            <a href="{{ route('print_penyerahan') }}" class="btn btn-warning btn-xs"><i
-                                    class="fa fa-print"></i>
-                                Print</a>
-                        </div>
                     </div>
                     <div class="box-body table-responsive">
                         <table class="table table-bordered table-striped" id="data-karyawan">
@@ -90,7 +85,6 @@
                                     <th>Jumlah</th>
                                     <th>Kondisi</th>
                                     <th>Status</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,19 +101,6 @@
                                         <td>{{ @$value->jumlah_barbuk }}</td>
                                         <td>{{ @$value->kondisi_barbuk }}</td>
                                         <td>{{ @$value->status }}</td>
-                                        <td>
-                                            <a href="{{ route('detail_bukti', $value->id_barang_bukti) }}"
-                                                class="btn btn-xs btn-success"><i class="fa fa-eye"></i>Detail</a>
-                                            @if (@$value->status == 'Diserahkan')
-                                                <button class="btn btn-xs btn-success btn-selesai"><i class="fa fa-check">
-                                                        Selesai</i></button> &nbsp;
-                                                <button class="btn btn-xs btn-danger btn-edit-karyawan"><i
-                                                        class="fa fa-edit">
-                                                        Pengembalian</i></button>
-                                            @else
-                                            @endif
-
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

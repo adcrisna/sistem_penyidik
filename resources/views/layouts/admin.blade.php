@@ -19,9 +19,9 @@
     <div class="wrapper">
 
         <header class="main-header">
-            <a href="{{ route('penyidik_home') }}" class="logo">
+            <a href="{{ route('admin_home') }}" class="logo">
                 <span class="logo-mini"><b>BNN</b></span>
-                <span class="logo-lg"><b>Penyidik</b></span>
+                <span class="logo-lg"><b>Admin</b></span>
             </a>
             <nav class="navbar navbar-static-top">
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -33,47 +33,42 @@
             <section class="sidebar">
                 <ul class="sidebar-menu">
                     <li>
-                        <a href="{{ route('penyidik_home') }}">
+                        <a href="{{ route('admin_home') }}">
                             <i class="fa fa-home"></i> <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('data_petugas') }}">
-                            <i class="fa fa-users"></i> <span>Data Petugas</span>
+                        <a href="{{ route('data_user') }}">
+                            <i class="fa fa-users"></i> <span>Data Users</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('data_kasus') }}">
-                            <i class="fa fa-list-alt"></i> <span>Data Kasus</span>
+                        <a href="{{ route('kasus') }}">
+                            <i class="fa fa-suitcase"></i> <span>Data Kasus</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('penyerahan_bukti') }}">
-                            <i class="fa fa-suitcase"></i> <span>Penyerahan Bukti</span>
+                        <a href="{{ route('bukti') }}">
+                            <i class="fa fa-suitcase"></i> <span>Data Bukti</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('data_pengembalian') }}">
-                            <i class="fa fa-suitcase"></i> <span>Pengembalian Bukti</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('kasus_selesai') }}">
+                        <a href="{{ route('data_selesai') }}">
                             <i class="fa fa-list-alt"></i> <span>Kasus Selesai</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('history') }}">
-                            <i class="fa fa-list-alt"></i> <span>Log History</span>
+                        <a href="{{ route('data_history') }}">
+                            <i class="fa fa-list-alt"></i> <span>Data History</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('penyidik_profile') }}">
+                        <a href="{{ route('admin_profile') }}">
                             <i class="fa fa-wrench"></i> <span>Profile</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('penyidik_logout') }}">
+                        <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out"></i> <span>Logout</span>
                         </a>
                     </li>

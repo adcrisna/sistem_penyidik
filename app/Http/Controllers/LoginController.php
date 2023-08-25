@@ -21,6 +21,8 @@ class LoginController extends Controller
                 return \Redirect::to('/penyidik/home');
             }elseif (Auth::User()->jabatan == "Petugas" && Auth::User()->status == 'Aktif'){
                 return \Redirect::to('/petugas/home');
+            }elseif (Auth::User()->jabatan == "Admin" && Auth::User()->status == 'Aktif'){
+                return \Redirect::to('/admin/home');
             }
             else
             {

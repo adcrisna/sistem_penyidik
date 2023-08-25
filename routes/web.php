@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PenyidikController;
 use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,7 @@ use App\Http\Controllers\PetugasController;
 
 Route::any('/', [LoginController::class, 'index'])->name('index');
 Route::any('/proses_login', [LoginController::class, 'prosesLogin'])->name('login');
+Route::any('/logout', [AdminController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('penyidik')->middleware(['penyidik'])->group(function () {
@@ -41,12 +43,34 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/print_kasus', [PenyidikController::class, 'print_kasus'])->name('print_kasus');
 
         Route::any('/penyerahan_bukti', [PenyidikController::class, 'penyerahan_bukti'])->name('penyerahan_bukti');
+        Route::any('/detail_bukti{id}', [PenyidikController::class, 'detail_bukti'])->name('detail_bukti');
         Route::any('/edit_bukti', [PenyidikController::class, 'edit_bukti'])->name('edit_bukti');
         Route::any('/print_penyerahan', [PenyidikController::class, 'print_penyerahan'])->name('print_penyerahan');
-        Route::any('/selesai_kasus{id}', [PenyidikController::class, 'selesai'])->name('selesai');
+        Route::any('/selesai_kasus', [PenyidikController::class, 'selesai'])->name('selesai');
         Route::any('/pengembalian_bukti', [PenyidikController::class, 'pengembalian_bukti'])->name('pengembalian_bukti');
         Route::any('/data_pengembalian', [PenyidikController::class, 'data_pengembalian'])->name('data_pengembalian');
         Route::any('/print_pengembalian', [PenyidikController::class, 'print_pengembalian'])->name('print_pengembalian');
+        
+        Route::any('/history', [PenyidikController::class, 'history'])->name('history');
+        Route::any('/kasus_selesai', [PenyidikController::class, 'kasus_selesai'])->name('kasus_selesai');
+    });
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->middleware(['admin'])->group(function () {
+        Route::any('/home', [AdminController::class, 'index'])->name('admin_home');
+        Route::any('/profile_admin', [AdminController::class, 'profile'])->name('admin_profile');
+        Route::any('/update_admin', [AdminController::class, 'update_profile'])->name('update_admin');
+        Route::any('/data_user', [AdminController::class, 'data_user'])->name('data_user');
+
+        Route::any('/tambah_user', [AdminController::class, 'tambah_user'])->name('tambah_user');
+        Route::any('/update_user', [AdminController::class, 'update_user'])->name('update_user');
+        Route::any('/delete_user{id}', [AdminController::class, 'delete_user'])->name('delete_user');
+
+        Route::any('/kasus', [AdminController::class, 'kasus'])->name('kasus');
+        Route::any('/bukti', [AdminController::class, 'bukti'])->name('bukti');
+        Route::any('/data_history', [AdminController::class, 'data_history'])->name('data_history');
+        Route::any('/data_selesai', [AdminController::class, 'data_selesai'])->name('data_selesai');
     });
 });
 
